@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>OpenDCKit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0F2A44;
+  --ink-soft:#4A6076;
+  --paper:#F3F5F4;
+  --panel:#FFFFFF;
+  --line:#D5DCDE;
+  --signal:#0E9384;
+  --signal-soft:#DFF3F0;
+  --warn:#8A5A00;
+  --warn-bg:#FDF3DC;
+  --warn-line:#E8C97A;
+  --display:"Space Grotesk","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8EEF0; --ink-soft:#9DB0BC; --paper:#0C1820; --panel:#132430;
+    --line:#263B49; --signal:#3BC9B6; --signal-soft:#123833;
+    --warn:#E8C97A; --warn-bg:#2A2312; --warn-line:#5C4A1E;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8EEF0; --ink-soft:#9DB0BC; --paper:#0C1820; --panel:#132430;
+  --line:#263B49; --signal:#3BC9B6; --signal-soft:#123833;
+  --warn:#E8C97A; --warn-bg:#2A2312; --warn-line:#5C4A1E;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--body); font-size:17px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:900px;margin:0 auto;padding:0 24px}
+a{color:var(--signal)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;letter-spacing:-0.02em;margin:0}
+p{max-width:68ch}
+
+/* draft banner */
+.draft{background:var(--warn-bg);border-bottom:1px solid var(--warn-line);color:var(--warn);font-size:14.5px}
+.draft .wrap{padding-top:10px;padding-bottom:10px}
+.draft strong{font-family:var(--display)}
+
+/* masthead */
+header{border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:20px;padding-bottom:20px;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-0.02em}
+.mark svg{width:38px;height:38px;flex:none}
+nav{display:flex;gap:22px;font-size:15px}
+nav a{color:var(--ink-soft);text-decoration:none}
+nav a:hover{color:var(--signal)}
+
+/* hero */
+.hero .wrap{padding-top:72px;padding-bottom:56px}
+.hero h1{font-size:clamp(34px,6vw,54px);max-width:16ch}
+.hero .lede{font-size:20px;color:var(--ink-soft);margin-top:20px}
+.rail{margin:44px 0 8px;width:100%;height:120px}
+.rail text{font-family:var(--body);font-size:12.5px;fill:var(--ink-soft)}
+.cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+.btn{
+  display:inline-block;padding:11px 20px;border-radius:2px;text-decoration:none;
+  font-family:var(--display);font-weight:500;font-size:15.5px;
+}
+.btn-solid{background:var(--signal);color:var(--paper)}
+.btn-line{border:1px solid var(--line);color:var(--ink)}
+
+section{border-top:1px solid var(--line)}
+section .wrap{padding-top:56px;padding-bottom:56px}
+h2{font-size:clamp(24px,3.4vw,30px)}
+.sub{color:var(--ink-soft);margin-top:14px}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:34px;margin-top:36px}
+.cols h3{font-size:17px;margin-bottom:8px}
+.cols p{font-size:15.5px;color:var(--ink-soft);margin:0}
+
+/* layer stack */
+.stack{margin-top:36px;border:1px solid var(--line);background:var(--panel)}
+.layer{display:grid;grid-template-columns:200px 1fr;gap:20px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.layer:last-child{border-bottom:0}
+.layer.mid{background:var(--signal-soft)}
+.layer b{font-family:var(--display);font-size:15.5px}
+.layer span{font-size:15px;color:var(--ink-soft)}
+@media(max-width:620px){.layer{grid-template-columns:1fr;gap:4px}}
+
+/* status list */
+ol.status{list-style:none;padding:0;margin:32px 0 0;counter-reset:s}
+ol.status li{display:grid;grid-template-columns:24px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);font-size:16px}
+ol.status li:last-child{border-bottom:0}
+.dot{width:11px;height:11px;border-radius:50%;margin-top:8px;background:var(--line)}
+.dot.done{background:var(--signal)}
+.state{display:block;font-size:13.5px;color:var(--ink-soft);font-family:var(--display)}
+
+table{border-collapse:collapse;width:100%;margin-top:30px;font-size:15.5px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-weight:500;font-size:14px;color:var(--ink-soft)}
+.scroll{overflow-x:auto}
+
+footer{border-top:1px solid var(--line);background:var(--panel)}
+footer .wrap{padding-top:34px;padding-bottom:44px;font-size:14.5px;color:var(--ink-soft)}
+footer p{max-width:72ch}
+</style>
+</head>
+<body>
+
+<div class="draft"><div class="wrap"><strong>Draft for community review.</strong> Nothing here is published. Copy, claims, and the logo are placeholders for the founding group to accept, edit, or replace.</div></div>
+
+<header>
+  <div class="wrap">
+    <div class="mark">
+      <svg viewBox="0 0 150 130" aria-hidden="true">
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="12" stroke="currentColor">
+          <path d="M58 30 L22 64 L58 98"/>
+          <path d="M92 30 L128 64 L92 98 L78 122 L70 104"/>
+        </g>
+        <g fill="var(--signal)"><circle cx="62" cy="64" r="7"/><circle cx="88" cy="64" r="7"/></g>
+      </svg>
+      OpenDCKit
+    </div>
+    <nav>
+      <a href="#what">Overview</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#status">Status</a>
+      <a href="#involved">Get involved</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>A shared runtime for calls that do more than carry voice.</h1>
+    <p class="lede">OpenDCKit is a proposed open source SDK for the IMS Data Channel: one vendor-neutral runtime that lets an interactive calling application behave the same way on any handset, on any network.</p>
+
+    <svg class="rail" viewBox="0 0 900 120" role="img" aria-label="A call carries three parallel channels: audio, video, and the IMS data channel where OpenDCKit runs.">
+      <g stroke="var(--line)" stroke-width="2">
+        <line x1="30" y1="26" x2="870" y2="26"/>
+        <line x1="30" y1="58" x2="870" y2="58"/>
+      </g>
+      <line x1="30" y1="90" x2="870" y2="90" stroke="var(--signal)" stroke-width="3"/>
+      <g fill="var(--signal)">
+        <circle cx="300" cy="90" r="6"/><circle cx="450" cy="90" r="6"/><circle cx="600" cy="90" r="6"/>
+      </g>
+      <g fill="var(--ink-soft)">
+        <circle cx="30" cy="26" r="4"/><circle cx="870" cy="26" r="4"/>
+        <circle cx="30" cy="58" r="4"/><circle cx="870" cy="58" r="4"/>
+      </g>
+      <text x="30" y="18">Audio</text>
+      <text x="30" y="50">Video</text>
+      <text x="30" y="82" fill="var(--signal)">Data channel — OpenDCKit runs here</text>
+    </svg>
+
+    <div class="cta">
+      <a class="btn btn-solid" href="https://github.com/opendckit">Code on GitHub</a>
+      <a class="btn btn-line" href="#involved">Join the discussion</a>
+    </div>
+  </div>
+</div>
+
+<section id="what">
+  <div class="wrap">
+    <h2>What the project builds</h2>
+    <p class="sub">5G New Calling adds a data channel alongside the audio and video streams of an IMS call, so the two people on the line can draw, share a file, or work through a visual service menu without leaving the call. Making that work in practice needs a runtime on the device. Today every operator and handset vendor writes their own, and an application built for one rarely runs on another.</p>
+    <div class="cols">
+      <div>
+        <h3>One runtime per device</h3>
+        <p>A single SDK that manages the lifecycle of data channel applications, tied to call state, so vendors are not each shipping a parallel implementation.</p>
+      </div>
+      <div>
+        <h3>Standards first</h3>
+        <p>Built against the existing 3GPP and GSMA specifications, including the TS.71 device interfaces and TS.66 JavaScript APIs, rather than defining new ones.</p>
+      </div>
+      <div>
+        <h3>Room for differentiation</h3>
+        <p>Extended capability interfaces let operators and device makers add their own features through separate packages without forking the runtime.</p>
+      </div>
+      <div>
+        <h3>Something to test against</h3>
+        <p>Simulated calls and local application packages let developers build and debug without standing up a live network first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="wrap">
+    <h2>Where it sits</h2>
+    <p class="sub">The SDK is the middle layer. It takes call and channel primitives from the device below it, and exposes a stable interface to the applications above.</p>
+    <div class="stack">
+      <div class="layer"><b>Data channel apps</b><span>Web applications loaded during a call. They call JavaScript APIs and never talk to the device directly.</span></div>
+      <div class="layer mid"><b>OpenDCKit</b><span>Application lifecycle, isolated storage, package signing and verification, channel caching, permission gating, and the extended capability plug-in mechanism.</span></div>
+      <div class="layer"><b>Device and network</b><span>Call state and IMS data channel establishment, exposed through the standard device interfaces.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="status">
+  <div class="wrap">
+    <h2>Formation status</h2>
+    <p class="sub">OpenDCKit is in formation as a project of LF Networking. It has not launched. This page tracks what is done and what the founding group still needs to agree on.</p>
+    <ol class="status">
+      <li><span class="dot done"></span><div><span class="state">Agreed</span>Project name and reserved infrastructure: the opendckit GitHub organization and opendckit.org.</div></li>
+      <li><span class="dot done"></span><div><span class="state">Agreed</span>Apache License 2.0 for inbound and outbound code, with documentation under CC BY 4.0.</div></li>
+      <li><span class="dot"></span><div><span class="state">Open</span>Technical charter. Draft circulated; the founding group needs to settle the open questions and agree on final language.</div></li>
+      <li><span class="dot"></span><div><span class="state">Open</span>Initial maintainers. The charter seats the TSC from the maintainer list, so that list needs to be agreed and landed in a CONTRIBUTING file.</div></li>
+      <li><span class="dot"></span><div><span class="state">Open</span>Logo. Concepts are in circulation; the group picks a direction and the final SVG goes to the Linux Foundation.</div></li>
+      <li><span class="dot"></span><div><span class="state">Open</span>Asset transfer. Code moves into the opendckit organization, the Linux Foundation is added as an organization owner, and the domain is transferred.</div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="involved">
+  <div class="wrap">
+    <h2>Get involved</h2>
+    <p class="sub">Everything the project does happens in the open. Anyone can read along, and anyone who wants to contribute is welcome to.</p>
+    <div class="scroll">
+      <table>
+        <tr><th>What</th><th>Where</th></tr>
+        <tr><td>Source code and issues</td><td><a href="https://github.com/opendckit">github.com/opendckit</a></td></tr>
+        <tr><td>Mailing list</td><td>To be created during onboarding</td></tr>
+        <tr><td>Chat</td><td>To be created during onboarding</td></tr>
+        <tr><td>TSC meetings</td><td>Open to the public; schedule to be published once the TSC is seated</td></tr>
+        <tr><td>Technical charter</td><td>To be linked here once adopted</td></tr>
+      </table>
+    </div>
+    <p class="sub">Contributions are made under the Apache License 2.0 and need a Developer Certificate of Origin sign-off. The code of conduct and contribution guide will be linked here once the community publishes them.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Copyright &copy; OpenDCKit a Series of LF Projects, LLC. For web site terms of use, trademark policy and other project policies please see <a href="https://lfprojects.org">https://lfprojects.org</a>.</p>
+    <p>OpenDCKit is a project of LF Networking, a directed fund of The Linux Foundation.</p>
+  </div>
+</footer>
+
+</body>
+</html>
