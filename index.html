@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="OpenDCKit is an open, vendor-neutral SDK for the IMS data channel, giving 5G New Calling applications one standard runtime on any device and any network. An LF Networking project.">
+<link rel="icon" type="image/svg+xml" href="assets/opendckit-icon.svg">
+<title>OpenDCKit: an open SDK for the IMS data channel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: LF Networking 2026 site system (dark grid ground, mono section labels,
+   heading-left / intro-right section heads, outlined 15px cards) re-keyed to the
+   OpenDCKit logo: teal leads, navy tint as the gradient partner. Single dark look by design. */
+:root {
+  color-scheme: dark;
+  --ground: #06080f;          /* LFN page ground */
+  --ground-raise: #0a101c;
+  --ink: #ffffff;
+  --ink-soft: #b4bdcb;
+  --ink-faint: #7d8799;
+  --teal: #14b8a6;            /* logo teal: borders, buttons */
+  --teal-text: #5eead4;       /* teal lifted for small text on near-black */
+  --teal-wash: rgba(20, 184, 166, 0.10);
+  --navy: #1b3a8c;            /* logo navy: glow only */
+  --navy-tint: #8ea4ee;       /* navy lifted for gradient legibility */
+  --line: rgba(255, 255, 255, 0.10);
+  --grid: rgba(142, 164, 238, 0.06);
+  --grad: linear-gradient(120deg, var(--teal-text), var(--navy-tint));
+  --f-display: "Geist", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --radius: 15px;
+  --btn-radius: 5px;
+  --wrap: 1200px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background-color: var(--ground);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 64px 64px;
+  color: var(--ink);
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--teal-text); outline-offset: 3px; }
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 900px) { .wrap { padding-left: max(48px, env(safe-area-inset-left, 0px)); padding-right: max(48px, env(safe-area-inset-right, 0px)); } }
+
+h1, h2, h3 { font-weight: 500; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.3rem, 5.4vw, 3.6rem); line-height: 1.08; }
+h2 { font-size: clamp(1.9rem, 3.8vw, 2.55rem); line-height: 1.15; }
+h3 { font-size: 1.35rem; line-height: 1.3; }
+p { margin: 0; }
+.grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.label {
+  font-family: var(--f-mono);
+  font-size: 0.82rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--teal-text);
+  line-height: 1.6;
+}
+
+
+/* LF Projects strip */
+.lfstrip { border-bottom: 1px solid var(--line); font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+.lfstrip .wrap { padding-block: 8px; }
+.lfstrip b { color: var(--ink); font-weight: 500; }
+
+/* Header */
+header.site {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: rgba(6, 8, 15, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--ground); }
+header.site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 14px; flex-wrap: wrap; }
+.brand { display: block; line-height: 0; }
+.brand img { height: 44px; width: auto; display: block; }
+nav.main { display: flex; align-items: center; gap: 26px; flex-wrap: wrap; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 400; }
+nav.main a { text-decoration: none; color: var(--ink); }
+nav.main a:hover { color: var(--teal-text); }
+nav.main .navbtn { border: 1px solid var(--teal); border-radius: var(--btn-radius); padding: 7px 16px; color: var(--teal-text); }
+nav.main .navbtn:hover { background: var(--teal-wash); }
+
+/* Buttons */
+.btns { display: flex; flex-wrap: wrap; gap: 14px; }
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  border-radius: var(--btn-radius);
+  padding: 13px 22px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  border: 2px solid transparent;
+}
+.btn-solid { background: var(--teal); color: #04221e; }
+.btn-solid:hover { background: var(--teal-text); }
+.btn-teal { border-color: rgba(20, 184, 166, 0.8); color: var(--teal-text); }
+.btn-teal:hover { background: var(--teal-wash); }
+.btn-plain { border-color: rgba(255, 255, 255, 0.7); color: var(--ink); }
+.btn-plain:hover { background: rgba(255, 255, 255, 0.06); }
+
+/* Hero */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+.hero::after {
+  content: ""; position: absolute; right: -10%; top: -30%; width: 70%; aspect-ratio: 1; max-width: 900px;
+  background: radial-gradient(circle, rgba(27, 58, 140, 0.55) 0%, rgba(27, 58, 140, 0) 65%);
+  pointer-events: none;
+}
+.hero .wrap { position: relative; z-index: 1; padding-block: clamp(64px, 10vw, 120px) clamp(56px, 8vw, 96px); display: grid; gap: 28px; }
+.hero h1 { max-width: 16ch; }
+.hero .lead { max-width: 60ch; color: var(--ink-soft); font-size: 1.08rem; }
+
+/* Call channels figure in hero */
+.channels { display: grid; gap: 10px; max-width: 560px; margin-top: 6px; }
+.chan {
+  display: grid; grid-template-columns: 6.5rem 1fr; align-items: center; gap: 14px;
+  font-family: var(--f-mono); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint);
+}
+.chan .track { height: 10px; border-radius: 99px; border: 1px solid var(--line); position: relative; overflow: hidden; }
+.chan .track::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, rgba(255,255,255,0.14) 0 3px, transparent 3px 9px); }
+.chan.on { color: var(--teal-text); }
+.chan.on .track { border-color: var(--teal); background: var(--teal-wash); }
+.chan.on .track::before { background: repeating-linear-gradient(90deg, var(--teal) 0 14px, transparent 14px 22px); animation: flow 2.4s linear infinite; }
+@keyframes flow { to { background-position: 44px 0; } }
+@media (prefers-reduced-motion: reduce) { .chan.on .track::before { animation: none; } }
+.chan-note { font-family: var(--f-mono); font-size: 0.72rem; color: var(--ink-faint); letter-spacing: 0.04em; }
+
+/* Sections */
+section.block { padding-block: clamp(64px, 9vw, 112px); border-bottom: 1px solid var(--line); }
+.head { display: grid; gap: 22px; margin-bottom: clamp(36px, 5vw, 56px); }
+.head .intro { color: var(--ink-soft); max-width: 58ch; }
+@media (min-width: 900px) {
+  .head { grid-template-columns: 1fr 1fr; column-gap: 64px; align-items: end; }
+  .head .label { grid-column: 1 / -1; }
+}
+
+/* Three pillars: open columns, no cards (as LFN mission) */
+.pillars { display: grid; gap: 40px; }
+@media (min-width: 820px) { .pillars { grid-template-columns: repeat(3, 1fr); gap: 48px; } }
+.pillar { display: grid; gap: 14px; align-content: start; border-top: 1px solid var(--line); padding-top: 22px; min-width: 0; }
+.pillar p { color: var(--ink-soft); font-size: 1rem; line-height: 1.75; }
+
+/* In-call examples */
+.uses { display: grid; gap: 14px; margin-top: 8px; }
+@media (min-width: 720px) { .uses { grid-template-columns: repeat(3, 1fr); } }
+.use { border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.use .label { color: var(--ink-faint); }
+.use p { font-size: 1rem; line-height: 1.6; }
+
+/* Architecture card */
+.arch {
+  border: 1px solid rgba(20, 184, 166, 0.45);
+  border-radius: var(--radius);
+  background: linear-gradient(160deg, rgba(27, 58, 140, 0.20), rgba(6, 8, 15, 0) 60%), var(--ground-raise);
+  padding: clamp(24px, 4vw, 44px);
+  display: grid; gap: 40px;
+}
+@media (min-width: 960px) { .arch { grid-template-columns: 1fr 1.05fr; gap: 56px; } }
+.arch .copy { display: grid; gap: 18px; align-content: start; min-width: 0; }
+.arch .copy p { color: var(--ink-soft); font-size: 1rem; line-height: 1.75; }
+.spec { font-family: var(--f-mono); font-size: 0.8rem; color: var(--ink-faint); letter-spacing: 0.03em; line-height: 1.7; }
+.stack { display: grid; gap: 10px; min-width: 0; }
+.stack-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.dot { display: inline-flex; align-items: center; gap: 8px; }
+.dot::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 4px var(--teal-wash); }
+.layer { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; display: grid; gap: 4px; min-width: 0; }
+.layer .name { font-weight: 600; font-size: 0.92rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.layer .what { font-family: var(--f-mono); font-size: 0.8rem; color: var(--ink-soft); line-height: 1.6; overflow-wrap: anywhere; }
+.layer.sdk { border-color: var(--teal); background: var(--teal-wash); }
+.layer.sdk .name { color: var(--teal-text); }
+.layer.net { border-style: dashed; }
+.link { text-align: center; font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--ink-faint); text-transform: uppercase; }
+
+/* DCLAB */
+.lab { display: grid; gap: 32px; align-items: center; }
+@media (min-width: 900px) { .lab { grid-template-columns: 1.2fr 1fr; gap: 64px; } }
+.lab .copy { display: grid; gap: 18px; min-width: 0; }
+.lab .copy p { color: var(--ink-soft); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.steps li { display: grid; grid-template-columns: 3rem 1fr; gap: 12px; padding: 16px 20px; border-top: 1px solid var(--line); font-size: 1rem; line-height: 1.6; }
+.steps li:first-child { border-top: 0; }
+.steps .n { font-family: var(--f-mono); color: var(--teal-text); font-size: 0.85rem; padding-top: 2px; }
+.steps span:last-child { min-width: 0; }
+
+/* Paths */
+.paths { display: grid; gap: 18px; }
+@media (min-width: 820px) { .paths { grid-template-columns: repeat(3, 1fr); } }
+.path { border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.path:hover { border-color: rgba(20, 184, 166, 0.6); }
+.path p { color: var(--ink-soft); font-size: 1rem; line-height: 1.7; }
+.path ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; font-family: var(--f-mono); font-size: 0.8rem; color: var(--ink-soft); line-height: 1.55; }
+.path li { display: grid; grid-template-columns: 14px 1fr; gap: 8px; }
+.path li::before { content: "/"; color: var(--teal-text); }
+
+/* Join */
+.join .wrap { display: grid; gap: 26px; justify-items: start; }
+.join h2 { font-size: clamp(2rem, 4.4vw, 3rem); max-width: 18ch; }
+.join .intro { color: var(--ink-soft); max-width: 60ch; }
+.where { width: 100%; display: grid; gap: 0; border-top: 1px solid var(--line); margin-top: 10px; }
+.where > div { display: grid; gap: 4px 24px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+@media (min-width: 720px) { .where > div { grid-template-columns: 14rem 1fr auto; align-items: baseline; } }
+.where dt { font-family: var(--f-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); }
+.where dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.where dd a { color: var(--teal-text); text-decoration: none; }
+.where dd a:hover { text-decoration: underline; }
+.state { font-family: var(--f-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 99px; border: 1px solid var(--line); color: var(--ink-faint); justify-self: start; }
+.state.live { border-color: var(--teal); color: var(--teal-text); }
+.fine { font-size: 0.92rem; color: var(--ink-faint); max-width: 70ch; line-height: 1.7; }
+
+/* Footer */
+footer.site { padding-block: 44px; font-size: 0.86rem; line-height: 1.7; color: var(--ink-faint); }
+footer.site .wrap { display: grid; gap: 22px; }
+footer.site .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 18px; align-items: center; }
+footer.site img { height: 34px; width: auto; display: block; }
+footer.site a { color: var(--ink-soft); }
+footer.site p { max-width: 80ch; }
+</style>
+</head>
+<body>
+
+<div class="lfstrip"><div class="wrap"><b>The Linux Foundation</b> Projects · LF Networking</div></div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="OpenDCKit home"><img src="assets/opendckit-logo-reverse.svg" alt="OpenDCKit" width="452" height="140"></a>
+    <nav class="main" aria-label="Main">
+      <a href="#overview">Overview</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#dclab">Get started</a>
+      <a href="#community">Community</a>
+      <a class="navbtn" href="https://github.com/opendckit">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="label">IMS Data Channel · 5G New Calling · An LF Networking project</p>
+      <h1>A shared runtime for calls that <span class="grad">do more than carry voice.</span></h1>
+      <p class="lead">OpenDCKit is an open, vendor-neutral SDK for the IMS data channel. It gives interactive calling applications one standard runtime, so an app built once behaves the same on any handset, on any network.</p>
+
+      <div class="channels" role="img" aria-label="An IMS call carries audio and video streams. OpenDCKit runs on the third stream, the data channel.">
+        <div class="chan"><span>Audio</span><span class="track"></span></div>
+        <div class="chan"><span>Video</span><span class="track"></span></div>
+        <div class="chan on"><span>Data</span><span class="track"></span></div>
+        <p class="chan-note">One IMS call, three streams. OpenDCKit runs on the data channel.</p>
+      </div>
+
+      <div class="btns">
+        <a class="btn btn-solid" href="https://github.com/opendckit">View the code</a>
+        <a class="btn btn-teal" href="#dclab">Try DCLAB</a>
+        <a class="btn btn-plain" href="#community">Join the community</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="overview">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">/ The problem</p>
+        <h2>Every operator and handset maker is <span class="grad">writing the same runtime.</span></h2>
+        <p class="intro">5G New Calling adds a data channel alongside the audio and video of an IMS call, so the two parties on the line can do more together without hanging up. That needs a runtime on the device. Today each vendor builds its own, and an application written for one rarely runs on another.</p>
+      </div>
+      <div class="uses">
+        <div class="use"><span class="label">Person to person · C2C</span><p>Draw on a shared screen or send a file while you keep talking.</p></div>
+        <div class="use"><span class="label">Person to business · C2B</span><p>Work through a visual service menu instead of pressing keys on a phone tree.</p></div>
+        <div class="use"><span class="label">Any device, any network</span><p>One application that runs wherever the call goes, instead of one build per handset.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">/ What the project builds</p>
+        <h2>One runtime, built on the standards that <span class="grad">already exist.</span></h2>
+        <p class="intro">OpenDCKit implements the existing 3GPP and GSMA specifications rather than inventing new ones, and leaves room for each operator and device maker to add their own features.</p>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <p class="label">/ Runtime</p>
+          <h3>One SDK per device.</h3>
+          <p>Manages the lifecycle of data channel applications in step with call state, so vendors stop shipping parallel implementations. Device UI can be customized through the root application.</p>
+        </div>
+        <div class="pillar">
+          <p class="label">/ Standards</p>
+          <h3>Specs first.</h3>
+          <p>Built against GSMA TS.71 for the chipset interfaces and GSMA TS.66 for the JavaScript APIs that applications call, alongside the 3GPP IMS data channel specifications.</p>
+        </div>
+        <div class="pillar">
+          <p class="label">/ Extensions</p>
+          <h3>Room to differentiate.</h3>
+          <p>Extended capability interfaces let operators and device makers ship their own features as separate packages, without forking the runtime.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="architecture">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">/ Architecture</p>
+        <h2>The middle layer of <span class="grad">the device.</span></h2>
+        <p class="intro">The SDK takes call and channel primitives from the device below it and gives the applications above it a stable interface. Applications never talk to the hardware directly.</p>
+      </div>
+      <div class="arch">
+        <div class="copy">
+          <p class="label">Reference architecture</p>
+          <h3>From the chipset to the app, during a live call.</h3>
+          <p>A device that integrates OpenDCKit provides the application runtime, with IMS data channel support built into the chipset. During an audio or video call it connects to an IMS network upgraded for data channel, and interactive services appear in the call.</p>
+          <p class="spec">Apache License 2.0 · Documentation under CC BY 4.0</p>
+        </div>
+        <div class="stack" aria-label="Device stack, top to bottom">
+          <div class="stack-top"><span class="label">Device stack</span><span class="label dot">In call</span></div>
+          <div class="layer"><span class="name">Data channel apps</span><span class="what">web apps loaded during the call · GSMA TS.66 JavaScript APIs</span></div>
+          <div class="layer sdk"><span class="name">OpenDCKit SDK</span><span class="what">lifecycle · isolated storage · package signing &amp; verification · channel caching · permissions · extension plug-ins</span></div>
+          <div class="layer"><span class="name">Device &amp; chipset</span><span class="what">call state · data channel setup · GSMA TS.71 chip interfaces</span></div>
+          <p class="link">IMS data channel</p>
+          <div class="layer net"><span class="name">IMS network</span><span class="what">DCSF · MF · P/I/S-CSCF · MMTel AS · application server</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="dclab">
+    <div class="wrap lab">
+      <div class="copy">
+        <p class="label">/ Get started</p>
+        <h2>Build in <span class="grad">DCLAB</span> before you touch a live network.</h2>
+        <p>DCLAB is an end-to-end simulated data channel environment. Use it to develop and test IMS data channel applications and application servers, and to try the service experience, without standing up an IMS core of your own.</p>
+        <div class="btns"><a class="btn btn-teal" href="#community">Request a DCLAB account</a></div>
+      </div>
+      <ol class="steps">
+        <li><span class="n">01</span><span>Request a DCLAB account.</span></li>
+        <li><span class="n">02</span><span>Build your app against the TS.66 JavaScript APIs.</span></li>
+        <li><span class="n">03</span><span>Place a simulated call and load the app into the data channel.</span></li>
+        <li><span class="n">04</span><span>Debug the app and its application server end to end.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="head">
+        <p class="label">/ Choose your path</p>
+        <h2>Wherever you sit <span class="grad">in the call.</span></h2>
+        <p class="intro">OpenDCKit is useful at every point between the network and the person holding the phone. Pick where you want to contribute.</p>
+      </div>
+      <div class="paths">
+        <div class="path">
+          <h3>Operators</h3>
+          <p>Bring requirements from live deployments into the roadmap, and test services against one runtime instead of one per handset.</p>
+          <ul><li>Shape the roadmap through the TSC</li><li>Interoperability across device makers</li></ul>
+        </div>
+        <div class="path">
+          <h3>Device &amp; chipset makers</h3>
+          <p>Integrate one SDK and keep your own features in extension packages that sit beside it.</p>
+          <ul><li>TS.71 chip interface integration</li><li>Extension packages, no fork</li></ul>
+        </div>
+        <div class="path">
+          <h3>Application developers</h3>
+          <p>Write an in-call app once against the TS.66 JavaScript APIs and run it on any device that ships OpenDCKit.</p>
+          <ul><li>Start in DCLAB</li><li>Open issues and code on GitHub</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block join" id="community">
+    <div class="wrap">
+      <p class="label">/ Join the community</p>
+      <h2>Built in the open, <span class="grad">by everyone on the call.</span></h2>
+      <p class="intro">Everything the project does happens in public. Anyone can read along, and anyone who wants to contribute is welcome.</p>
+      <dl class="where">
+        <div><dt>Code &amp; issues</dt><dd><a href="https://github.com/opendckit">github.com/opendckit</a></dd><span class="state live">Open</span></div>
+        <div><dt>TSC meetings</dt><dd>Weekly on Mondays, open to the public. Calendar on LFX.</dd><span class="state live">Open</span></div>
+        <div><dt>LFN TAC</dt><dd>OpenDCKit works alongside the other LF Networking projects through the <a href="https://lf-networking.atlassian.net/wiki/spaces/LN/pages/15633036/TAC+Technical+Advisory+Council">LFN Technical Advisory Council</a>, which coordinates communication and collaboration across LFN projects. Its calls are open to everyone.</dd><span class="state live">Open</span></div>
+        <div><dt>Mailing lists</dt><dd>Discussion, TSC and security lists</dd><span class="state">At launch</span></div>
+        <div><dt>Chat</dt><dd><a href="https://linuxfoundation.zulipchat.com">linuxfoundation.zulipchat.com</a>: #lfn-opendckit-discussion, #lfn-opendckit-support and #lfn-opendckit-tsc. Sign in with your LF ID through single sign-on.</dd><span class="state live">Open</span></div>
+        <div><dt>Technical charter</dt><dd>Linked here once adopted</dd><span class="state">At launch</span></div>
+      </dl>
+      <p class="fine">Code contributions are made under the Apache License 2.0 and need a Developer Certificate of Origin sign-off. The code of conduct and contribution guide will be linked here once the community publishes them.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="row"><img src="assets/opendckit-logo-reverse.svg" alt="OpenDCKit" width="452" height="140"><span class="label">An LF Networking project</span></div>
+    <p>Copyright © OpenDCKit a Series of LF Projects, LLC. For web site terms of use, trademark policy and other project policies please see <a href="https://lfprojects.org">https://lfprojects.org</a>.</p>
+    <p>OpenDCKit is a project of <a href="https://lfnetworking.org">LF Networking</a>, a directed fund of The Linux Foundation, and takes part in the <a href="https://lf-networking.atlassian.net/wiki/spaces/LN/pages/15633036/TAC+Technical+Advisory+Council">LFN Technical Advisory Council</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>
